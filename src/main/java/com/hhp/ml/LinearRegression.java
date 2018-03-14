@@ -1,6 +1,8 @@
 package com.hhp.ml;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -22,7 +24,7 @@ public class LinearRegression {
 	private static int n			= 0;//how many columns in the test data
 	private static Matrix theta;
 	private static Matrix X;
-	private static float[] J_history;
+	private static Map<Double, Matrix> J_history;
 
 	public static void main(String[] args) throws Exception {
 		System.out.println("reading data..");
@@ -62,12 +64,12 @@ public class LinearRegression {
 		//-------------------------------
 		System.out.println("plotting the linear fit..\n");
 		Matrix xTimesTheta = X.times(theta);
-		double[][] plot = new double[X.getRowDimension()][2];
+		double[][] linearFitData = new double[X.getRowDimension()][2];
 		for (int i = 0; i < m; i++) {
-			plot[i][0] 	= X.get(i, 1);
-			plot[i][1] 	= xTimesTheta.get(i, 0);
+			linearFitData[i][0] 	= X.get(i, 1);
+			linearFitData[i][1] 	= xTimesTheta.get(i, 0);
 		}
-		p.addPlot(new DataSetPlot(plot));
+		p.addPlot(new DataSetPlot(linearFitData));
 		p.plot();
 		//-------------------------------
 		System.out.println("predictions..\n");
@@ -96,16 +98,12 @@ public class LinearRegression {
 			}
 		}
 		CostAnalysis _JVisual = new CostAnalysis(thetaForVisual, costForVisual);
-		//Contour plot
 		AnalysisLauncher.open(_JVisual);
 		//-------------------------------
+		//Contour plot
 		//Plot J_vals as 15 contours spaced logarithmically between 0.01 and 100
-		double[] logspace = Util.logspace(-2, 3, 20, 10);
-		int xAxisBegin 	= -10;
-		int xAxisEnd 	= 10;
-		int yAxisBegin 	= -1;
-		int yAxisEnd 	= 4;
-		Plotter.plotData(costForVisual, xAxisBegin, xAxisEnd, yAxisBegin, yAxisEnd);
+		//-------------------------------
+		Plotter.plotGradientDescentCostHistory(J_history);
 	}
 
 	private static double computeCost(Matrix X, double[] y, Matrix theta){
@@ -128,7 +126,7 @@ public class LinearRegression {
 	}
 	
 	private static Matrix gradientDescent(Matrix x, double[] y, Matrix theta, double alpha, int iterations) {
-		J_history = new float[iterations];
+		J_history = new HashMap<>(iterations);
 		for (int i = 0; i < iterations; i++) {
 			Matrix pred = X.times(theta);
 			Matrix Y 	= new Matrix(y.length, 1);
@@ -143,7 +141,8 @@ public class LinearRegression {
 			temp 		= temp.transpose();
 			theta 		= theta.minus(temp);
 
-			J_history[i] = (float) computeCost(X, y, theta);
+			double cost = computeCost(X, y, theta);
+			J_history.put(cost, theta.transpose());
 		}
 		return theta;
 	}
