@@ -6,11 +6,12 @@ import java.util.Scanner;
 
 import org.jzy3d.analysis.AnalysisLauncher;
 
-import com.panayotis.gnuplot.JavaPlot;
-import com.panayotis.gnuplot.layout.StripeLayout;
-import com.panayotis.gnuplot.plot.DataSetPlot;
 import com.hhp.ml.cost.CostAnalysis;
 import com.hhp.ml.matrix.jama.Matrix;
+import com.hhp.ml.plot.Plotter;
+import com.hhp.ml.util.Util;
+import com.panayotis.gnuplot.JavaPlot;
+import com.panayotis.gnuplot.plot.DataSetPlot;
 
 
 public class LinearRegression {
@@ -41,7 +42,7 @@ public class LinearRegression {
 		X 			= new Matrix(matX);
 		Matrix Y 	= new Matrix(matY);
 		//-------------------------------
-		JavaPlot p = plotData(X, Y);
+		JavaPlot p = Plotter.plotData(X, Y, m);
 		//-------------------------------
 		theta 		= new Matrix(2,1,0);
 		X.addRow(new Matrix(m, 1, 1),':');
@@ -95,7 +96,16 @@ public class LinearRegression {
 			}
 		}
 		CostAnalysis _JVisual = new CostAnalysis(thetaForVisual, costForVisual);
+		//Contour plot
 		AnalysisLauncher.open(_JVisual);
+		//-------------------------------
+		//Plot J_vals as 15 contours spaced logarithmically between 0.01 and 100
+		double[] logspace = Util.logspace(-2, 3, 20, 10);
+		int xAxisBegin 	= -10;
+		int xAxisEnd 	= 10;
+		int yAxisBegin 	= -1;
+		int yAxisEnd 	= 4;
+		Plotter.plotData(costForVisual, xAxisBegin, xAxisEnd, yAxisBegin, yAxisEnd);
 	}
 
 	private static double computeCost(Matrix X, double[] y, Matrix theta){
@@ -110,45 +120,11 @@ public class LinearRegression {
 		J = (float) 1 / (2 * m);
 		Matrix temp = pred.minus(Y);
 		temp 		= temp.arrayTimesEquals(temp);
-		for (int i 	= 0; i < temp.getColumnDimension(); i++) {
+		for (int i 	= 0; i < temp.getRowDimension(); i++) {
 			tempSum += temp.get(i, 0);
 		}
 		J *= tempSum;
 		return J;
-	}
-	
-	private static JavaPlot plotData(Matrix x, Matrix y) {
-		JavaPlot p = new JavaPlot();
-		//JavaPlot.getDebugger().setLevel(Debug.VERBOSE);
-
-		p.setTitle("Default Terminal Title");
-		p.getAxis("x").setLabel("X axis", "Arial", 20);
-		p.getAxis("y").setLabel("Y axis");
-
-		p.getAxis("x").setBoundaries(5, 25);
-		p.getAxis("y").setBoundaries(-5, 25);
-		p.setKey(JavaPlot.Key.TOP_RIGHT);
-		double[][] plot = new double[x.getRowDimension()][2];
-		for (int i = 0; i < m; i++) {
-			plot[i][0] 	= x.get(i, 0);
-			plot[i][1] 	= y.get(i, 0);
-		}
-		p.addPlot(new DataSetPlot(plot));
-		//p.addPlot(x.getArray());
-		//p.addPlot("sin(x)");
-		/*
-		 * PlotStyle stl = ((AbstractPlot) p.getPlots().get(1)).getPlotStyle();
-		 * stl.setStyle(Style.POINTS);
-		 * stl.setLineType(NamedPlotColor.GOLDENROD); stl.setPointType(5);
-		 * stl.setPointSize(8);
-		 */
-
-		StripeLayout lo = new StripeLayout();
-		lo.setColumns(9999);
-		p.getPage().setLayout(lo);
-		p.plot();
-		return p;
-
 	}
 	
 	private static Matrix gradientDescent(Matrix x, double[] y, Matrix theta, double alpha, int iterations) {
