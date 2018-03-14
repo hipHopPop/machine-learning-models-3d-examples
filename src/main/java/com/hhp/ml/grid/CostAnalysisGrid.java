@@ -1,4 +1,4 @@
-package com.hhp.ml;
+package com.hhp.ml.grid;
 
 import java.util.ArrayList;
 import java.util.List;

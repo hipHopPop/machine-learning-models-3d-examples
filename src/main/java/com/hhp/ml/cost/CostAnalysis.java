@@ -1,4 +1,4 @@
-package com.hhp.ml;
+package com.hhp.ml.cost;
 
 import org.jzy3d.analysis.AbstractAnalysis;
 import org.jzy3d.chart.factories.AWTChartComponentFactory;
@@ -9,6 +9,8 @@ import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalTessellator;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+
+import com.hhp.ml.grid.CostAnalysisGrid;
 
 public class CostAnalysis extends AbstractAnalysis {
 

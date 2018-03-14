@@ -9,6 +9,7 @@ import org.jzy3d.analysis.AnalysisLauncher;
 import com.panayotis.gnuplot.JavaPlot;
 import com.panayotis.gnuplot.layout.StripeLayout;
 import com.panayotis.gnuplot.plot.DataSetPlot;
+import com.hhp.ml.cost.CostAnalysis;
 import com.hhp.ml.matrix.jama.Matrix;
 
 
