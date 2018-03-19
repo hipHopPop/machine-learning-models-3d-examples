@@ -1,4 +1,4 @@
-package com.hhp.ml.cost;
+package com.hhp.ml.plot.cost.analysis;
 
 import org.jzy3d.analysis.AbstractAnalysis;
 import org.jzy3d.chart.factories.AWTChartComponentFactory;
@@ -10,15 +10,15 @@ import org.jzy3d.plot3d.builder.concrete.OrthonormalTessellator;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
-import com.hhp.ml.grid.CostAnalysisGrid;
+import com.hhp.ml.plot.cost.grid.Cost3DAnalysisGrid;
 
-public class CostAnalysis extends AbstractAnalysis {
+public class Cost3DAnalysis extends AbstractAnalysis {
 
 	protected double[][] theta;
 	protected double[][] cost;
-    public CostAnalysis(double[][] theta, double[][] cost) {
+    public Cost3DAnalysis(double[][] theta, double[][] cost) {
 		this.cost 	= cost;
-		this.theta 		= theta;
+		this.theta 	= theta;
 	}
 
     @Override
@@ -43,14 +43,15 @@ public class CostAnalysis extends AbstractAnalysis {
                 output.add( new Coord3d(x, y, mapper.f(x, y) ) );
             }
         }*/
-        CostAnalysisGrid grid = new CostAnalysisGrid(theta, cost);
+        Cost3DAnalysisGrid grid = new Cost3DAnalysisGrid(theta, cost);
         OrthonormalTessellator tesselator = new OrthonormalTessellator();
         final Shape surface =  (Shape) tesselator.build(grid.apply(mapper));
 		
         // Create the object to represent the function over the given range.
         surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
         surface.setFaceDisplayed(true);
-        surface.setWireframeDisplayed(false);
+		surface.setWireframeDisplayed(true);
+		surface.setWireframeColor(Color.BLACK);
 
         // Create a chart
         chart = AWTChartComponentFactory.chart(Quality.Advanced, getCanvasType());

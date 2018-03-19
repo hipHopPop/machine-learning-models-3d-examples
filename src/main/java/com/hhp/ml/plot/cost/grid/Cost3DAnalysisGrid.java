@@ -1,4 +1,4 @@
-package com.hhp.ml.grid;
+package com.hhp.ml.plot.cost.grid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,12 +9,12 @@ import org.jzy3d.plot3d.builder.Mapper;
 
 
 /** CustomGrid allows using a specific projection mapping. For debugging purpose.*/
-public class CostAnalysisGrid extends Grid {
+public class Cost3DAnalysisGrid extends Grid {
 	
-	public CostAnalysisGrid(double[][] theta, double[][] cost) {
+	public Cost3DAnalysisGrid(double[][] theta, double[][] cost) {
 		super(null, 0);
 		this.cost 	= cost;
-		this.theta 		= theta;
+		this.theta 	= theta;
 	}
 
 	@Override
