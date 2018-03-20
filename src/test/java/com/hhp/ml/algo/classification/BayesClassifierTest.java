@@ -46,27 +46,29 @@ public class BayesClassifierTest {
 
     @Test
     public void testStringClassification() {
-        final String[] unknownText1 = "today is a sunny day".split("\\s");
-        final String[] unknownText2 = "there will be rain".split("\\s");
+    	String unknownText1 = "today is a sunny day";
+    	String unknownText2 = "there will be rain";
 
-        Assert.assertEquals(CATEGORY_POSITIVE, bayes.classify(Arrays.asList(unknownText1)).getCategory());
-        Assert.assertEquals(CATEGORY_NEGATIVE, bayes.classify(Arrays.asList(unknownText2)).getCategory());
+        Assert.assertEquals(CATEGORY_POSITIVE, bayes.classify(Arrays.asList(unknownText1.split("\\s")), unknownText1).getCategory());
+        Assert.assertEquals(CATEGORY_NEGATIVE, bayes.classify(Arrays.asList(unknownText2.split("\\s")), unknownText2).getCategory());
     }
 
     @Test
     public void testStringClassificationInDetails() {
 
-        final String[] unknownText1 = "today is a sunny day".split("\\s");
+    	String unknownText1 = "today is a sunny day";
 
         Collection<Classification<String, String>> classifications = ((BayesClassifier<String, String>) bayes)
-                .classifyDetailed(Arrays.asList(unknownText1));
+                .classifyDetailed(Arrays.asList(unknownText1.split("\\s")), unknownText1);
 
         List<Classification<String, String>> list = new ArrayList<Classification<String, String>>(classifications);
 
         Assert.assertEquals(CATEGORY_NEGATIVE, list.get(0).getCategory());
+        System.out.println(list.get(0).getProbability());
         Assert.assertEquals(0.0078125, list.get(0).getProbability(), EPSILON);
 
         Assert.assertEquals(CATEGORY_POSITIVE, list.get(1).getCategory());
+        System.out.println(list.get(1).getProbability());
         Assert.assertEquals(0.0234375, list.get(1).getProbability(), EPSILON);
     }
 

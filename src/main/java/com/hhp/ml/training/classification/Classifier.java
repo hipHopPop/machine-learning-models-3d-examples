@@ -395,6 +395,38 @@ public abstract class Classifier<T, K> implements IFeatureProbability<T, K>, jav
     }
 
     /**
+     * If a category has an exact match for a feature, use it
+     *
+     * @param featureForExactMatch
+     *            The feature to classify for an exact match.
+     * @return The category the features is classified as.
+     */
+    public Classification<T, K> checkForAnExactMatchInOneCategory(T featureForExactMatch) {
+
+        int featureCount = 0;
+        K category = null;
+        for (Enumeration<K> ke = this.featureCountPerCategory.keys(); ke.hasMoreElements();) {
+        	K k = ke.nextElement();
+        	Dictionary<T, Integer> d = this.featureCountPerCategory.get(k);
+			for (Enumeration<T> te = d.keys(); te.hasMoreElements();) {
+            	T t = te.nextElement();
+            	if (t.toString().equals(featureForExactMatch.toString())) {
+            		Integer count = d.get(t);
+            		if (count > 0) {
+            			featureCount += count;
+            			category = k;
+            		}
+            	}
+            }
+        }
+    	if (featureCount == 1) {
+    		return new Classification<T, K>(featureForExactMatch, category);
+    	} else {
+    		return null;
+    	}
+    }
+
+    /**
      * Train the classifier by telling it that the given features resulted in
      * the given category.
      *
@@ -429,6 +461,8 @@ public abstract class Classifier<T, K> implements IFeatureProbability<T, K>, jav
             this.decrementCategory(toForget.getCategory());
         }
     }
+    
+    
 
     /**
      * The classify method. It will retrieve the most likely category for the
@@ -436,8 +470,10 @@ public abstract class Classifier<T, K> implements IFeatureProbability<T, K>, jav
      *
      * @param features
      *            The features to classify.
+     * @param featureForExactMatch
+     *            The feature to classify for an exact match.
      * @return The category most likely.
      */
-    public abstract Classification<T, K> classify(Collection<T> features);
+    public abstract Classification<T, K> classify(Collection<T> features, T featureForExactMatch);
 
 }

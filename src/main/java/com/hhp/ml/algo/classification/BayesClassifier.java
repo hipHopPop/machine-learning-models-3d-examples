@@ -1,7 +1,10 @@
 package com.hhp.ml.algo.classification;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -52,6 +55,10 @@ public class BayesClassifier<T, K> extends Classifier<T, K> {
                 * featuresProbabilityProduct(features, category);
     }
 
+    private float categoryProbabilityIgnoreCategoryCount(Collection<T> features, K category) {
+        return featuresProbabilityProduct(features, category);
+    }
+
     /**
      * Retrieves a sorted <code>Set</code> of probabilities that the given set
      * of features is classified as the available categories.
@@ -87,7 +94,8 @@ public class BayesClassifier<T, K> extends Classifier<T, K> {
         for (K category : this.getCategories())
             probabilities.add(new Classification<T, K>(
                     features, category,
-                    this.categoryProbability(features, category)));
+                    //this.categoryProbability(features, category)));
+                    this.categoryProbabilityIgnoreCategoryCount(features, category)));
         return probabilities;
     }
 
@@ -97,7 +105,14 @@ public class BayesClassifier<T, K> extends Classifier<T, K> {
      * @return The category the set of features is classified as.
      */
     @Override
-    public Classification<T, K> classify(Collection<T> features) {
+    public Classification<T, K> classify(Collection<T> features, T featureForExactMatch) {
+    	
+    	// if a category has an exact match for a feature, use it
+    	Classification<T, K> c = this.checkForAnExactMatchInOneCategory(featureForExactMatch);
+    	if (c != null) {
+    		return c;
+    	}
+    	//
         SortedSet<Classification<T, K>> probabilites =
                 this.categoryProbabilities(features);
 
@@ -107,14 +122,21 @@ public class BayesClassifier<T, K> extends Classifier<T, K> {
         return null;
     }
 
-    /**
+	/**
      * Classifies the given set of features. and return the full details of the
      * classification.
      *
      * @return The set of categories the set of features is classified as.
      */
     public Collection<Classification<T, K>> classifyDetailed(
-            Collection<T> features) {
+            Collection<T> features, T featureForExactMatch) {
+    	
+    	// if a category has an exact match for a feature, use it
+    	Classification<T, K> c = this.checkForAnExactMatchInOneCategory(featureForExactMatch);
+    	if (c != null) {
+    		return new HashSet<Classification<T, K>>(Arrays.asList(c));
+    	}
+    	//
         return this.categoryProbabilities(features);
     }
 

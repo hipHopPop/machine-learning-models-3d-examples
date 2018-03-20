@@ -27,6 +27,11 @@ public class Classification<T, K> implements Serializable {
     private Collection<T> featureset;
 
     /**
+     * The classified feature.
+     */
+    private T featureExactlyMatchingInOneCategory;
+
+    /**
      * The category as which the featureset was classified.
      */
     private K category;
@@ -66,6 +71,19 @@ public class Classification<T, K> implements Serializable {
     }
 
     /**
+     * Constructs a new Classification with the parameters given.
+     *
+     * @param featureExactlyMatchingInOneCategory
+     *            The featureExactlyMatchingInOneCategory.
+     * @param category
+     *            The category.
+     */
+    public Classification(T featureExactlyMatchingInOneCategory, K category) {
+        this.featureExactlyMatchingInOneCategory = featureExactlyMatchingInOneCategory;
+        this.category = category;
+	}
+
+	/**
      * Retrieves the featureset classified.
      *
      * @return The featureset.
