@@ -1,4 +1,4 @@
-package com.hhp.ml.training;
+package com.hhp.ml.training.LR;
 
 import com.hhp.ml.data.Data;
 import com.hhp.ml.matrix.jama.Matrix;

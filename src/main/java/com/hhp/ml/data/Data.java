@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import com.hhp.ml.LinearRegression;
+import com.hhp.ml.algo.LR.LinearRegression;
 import com.hhp.ml.matrix.jama.Matrix;
 
 public class Data {

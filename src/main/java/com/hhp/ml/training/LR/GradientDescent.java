@@ -1,4 +1,4 @@
-package com.hhp.ml.training;
+package com.hhp.ml.training.LR;
 
 import java.util.HashMap;
 
