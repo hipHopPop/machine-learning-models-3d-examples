@@ -65,11 +65,13 @@ public class BayesClassifierTest {
 
         Assert.assertEquals(CATEGORY_NEGATIVE, list.get(0).getCategory());
         System.out.println(list.get(0).getProbability());
-        Assert.assertEquals(0.0078125, list.get(0).getProbability(), EPSILON);
+        //Assert.assertEquals(0.0078125, list.get(0).getProbability(), EPSILON);
+        Assert.assertEquals(0.015625, list.get(0).getProbability(), EPSILON);
 
         Assert.assertEquals(CATEGORY_POSITIVE, list.get(1).getCategory());
         System.out.println(list.get(1).getProbability());
-        Assert.assertEquals(0.0234375, list.get(1).getProbability(), EPSILON);
+        //Assert.assertEquals(0.0234375, list.get(1).getProbability(), EPSILON);
+        Assert.assertEquals(0.046875, list.get(1).getProbability(), EPSILON);
     }
 
     @Test
