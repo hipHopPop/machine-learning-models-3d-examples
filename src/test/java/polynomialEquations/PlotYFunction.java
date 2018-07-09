@@ -2,7 +2,7 @@ package polynomialEquations;
 
 import com.hhp.ml.plot.Plotter;
 
-public class Test {
+public class PlotYFunction {
 	public static void main(String[] args) {
 		
 		int xAxisBegin = -100;
@@ -14,10 +14,14 @@ public class Test {
 		double[][] d = new double[noOfDataPoints][2];
 		for (int i = 0,x = xAxisBegin; i < noOfDataPoints; i++,x++) {
 			d[i][0] = x;
-			d[i][1] = getY_2(x);
+			d[i][1] = getY_sigmoid(x);
 			System.out.println(d[i][0]+" - "+d[i][1]);
 		}
 		Plotter.plotData(d, xAxisBegin, xAxisEnd, yAxisBegin, yAxisEnd);
+	}
+
+	private static double getY_sigmoid(double x) {
+		return (1 / (1 + Math.pow(Math.E, -1*getY_2_2(x))));
 	}
 
 	private static double getY_5_3(double x) {
