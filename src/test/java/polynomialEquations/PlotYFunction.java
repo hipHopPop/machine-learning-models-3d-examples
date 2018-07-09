@@ -1,27 +1,63 @@
 package polynomialEquations;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 import com.hhp.ml.plot.Plotter;
 
 public class PlotYFunction {
-	public static void main(String[] args) {
-		
-		int xAxisBegin = -100;
-		int xAxisEnd = 100;
+	public static void main(String[] args) throws IOException {
+
+		FileWriter fw = new FileWriter("out.log");
+		int xAxisBegin = -10;
+		int xAxisEnd = 10;
 		int yAxisBegin = -10;
 		int yAxisEnd = 10;
-		
-		int noOfDataPoints = (xAxisBegin<0?xAxisBegin*-1:xAxisBegin) + (xAxisEnd<0?xAxisEnd*-1:xAxisEnd);
+
+		int noOfDataPointsIn1 = 100;
+		int noOfDataPoints = 20 * noOfDataPointsIn1;
 		double[][] d = new double[noOfDataPoints][2];
-		for (int i = 0,x = xAxisBegin; i < noOfDataPoints; i++,x++) {
+		double x = xAxisBegin;
+		for (int i = 0; i < noOfDataPoints; i++, x += (1d / noOfDataPointsIn1)) {
 			d[i][0] = x;
-			d[i][1] = getY_sigmoid(x);
-			System.out.println(d[i][0]+" - "+d[i][1]);
+			d[i][1] = getY_log_12(x);
+			fw.write(d[i][0] + " > " + d[i][1] + "\n");
+			System.out.println(d[i][0] + " > " + d[i][1]);
 		}
 		Plotter.plotData(d, xAxisBegin, xAxisEnd, yAxisBegin, yAxisEnd);
+		fw.close();
+	}
+
+	private static double getY_log_22(double x) {
+		return -1 * Math.log(1 - getY_1(x));
+	}
+
+	private static double getY_log_2(double x) {
+		return -1 * Math.log(getY_1(x));
+	}
+
+	private static double getY_log_12(double x) {
+		return -1 * Math.log(1 - x);
+	}
+
+	private static double getY_log_1(double x) {
+		return -1 * Math.log(x);
+	}
+
+	private static double getY_log(double x) {
+		return Math.log(x);
+	}
+
+	private static double getY_log_sigmoid_1(double x) {
+		return -1 * Math.log(1 - getY_sigmoid(x));
+	}
+
+	private static double getY_log_sigmoid(double x) {
+		return -1 * Math.log(getY_sigmoid(x));
 	}
 
 	private static double getY_sigmoid(double x) {
-		return (1 / (1 + Math.pow(Math.E, -1*getY_2_2(x))));
+		return (1 / (1 + Math.pow(Math.E, -1 * getY_1(x))));
 	}
 
 	private static double getY_5_3(double x) {
